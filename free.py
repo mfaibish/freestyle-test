@@ -14,10 +14,7 @@ request_url = "http://api.tvmaze.com/schedule/full"
 response = requests.get(request_url)
 parsed_response = json.loads(response.text)
 
-#breakpoint()
-#print(response)
-#print(parsed_response)
-breakpoint()
+
 
 DOCUMENT_ID = os.environ.get("DOCUMENT_ID", "OOPS")
 SHEET_NAME = os.environ.get("SHEET_NAME", "Shows")
@@ -50,8 +47,14 @@ print("-----------------")
 
 sheet = doc.worksheet(SHEET_NAME) #> <class 'gspread.models.Worksheet'>
 
-rows = sheet.get_all_records() #> <class 'list'>
+shows = sheet.get_all_records() #> <class 'list'>
 
-for row in rows:
-    print(row) #> <class 'dict'>
+
+for show in shows:
+    print(shows) #> <class 'dict'>
+
+
+
+
+
 
