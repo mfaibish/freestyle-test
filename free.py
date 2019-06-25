@@ -3,6 +3,7 @@
 import json
 from dotenv import load_dotenv
 import os
+import datetime
 
 import requests
 import gspread
@@ -43,22 +44,13 @@ print("SPREADSHEET:", doc.title)
 print("-----------------")
 
 sheet = doc.worksheet(SHEET_NAME) #> <class 'gspread.models.Worksheet'>
-shows = sheet.get_all_records() #> <class 'list'>
+shows = sheet.get_all_records() #> <class 'list'> - list of shows from google sheet 
 
 # OUTPUTS 
 
 for row in shows: 
-    show_names = [p for p in parsed_response if p["_embedded"]["show"]["name"] == row["Name"]]
+    show_names = [p for p in parsed_response if p["_embedded"]["show"]["name"] == row["Name"]] # puts shows from api in a smaller list based on google spreadsheet values 
     print(show_names)
-
-    #breakpoint()
-    #if row["Name"] == parsed_response["_embedded"]["show"]["name"]:
-    #    print(parsed_response["airdate"] + " " + parsed_response["airtime"]) #> <class 'dict'>
-
-#or show in parsed_response:
-#   breakpoint()
-#   print(show["Name"])
-
-
+    print(show_names["airdate"])
 
 
