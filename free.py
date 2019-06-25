@@ -14,13 +14,11 @@ request_url = "http://api.tvmaze.com/schedule/full"
 response = requests.get(request_url)
 parsed_response = json.loads(response.text)
 
-
-
 DOCUMENT_ID = os.environ.get("DOCUMENT_ID", "OOPS")
 SHEET_NAME = os.environ.get("SHEET_NAME", "Shows")
 
 #
-# AUTHORIZATION
+# AUTHORIZATION OF GOOGLE SHEET
 #
 
 CREDENTIALS_FILEPATH = os.path.join(os.path.dirname(__file__), "auth", "google_api_credentials.json")
@@ -33,27 +31,33 @@ AUTH_SCOPE = [
 credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILEPATH, AUTH_SCOPE)
 
 #
-# READ SHEET VALUES
+# READ GOOGLE SHEET VALUES
 #
 
 client = gspread.authorize(credentials) #> <class 'gspread.client.Client'>
 
 doc = client.open_by_key(DOCUMENT_ID) #> <class 'gspread.models.Spreadsheet'>
 
-
 print("-----------------")
 print("SPREADSHEET:", doc.title)
 print("-----------------")
 
 sheet = doc.worksheet(SHEET_NAME) #> <class 'gspread.models.Worksheet'>
-
 shows = sheet.get_all_records() #> <class 'list'>
 
+# OUTPUTS 
 
-for show in shows:
-    print(shows) #> <class 'dict'>
+for row in shows: 
+    show_names = [p for p in parsed_response if p["_embedded"]["show"]["name"] == row["Name"]]
+    print(show_names)
 
+    #breakpoint()
+    #if row["Name"] == parsed_response["_embedded"]["show"]["name"]:
+    #    print(parsed_response["airdate"] + " " + parsed_response["airtime"]) #> <class 'dict'>
 
+#or show in parsed_response:
+#   breakpoint()
+#   print(show["Name"])
 
 
 
