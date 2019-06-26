@@ -11,6 +11,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 load_dotenv()
 
+# LOAD API DATA FROM TVMAZE
 request_url = "http://api.tvmaze.com/schedule/full"
 response = requests.get(request_url)
 parsed_response = json.loads(response.text)
@@ -49,8 +50,13 @@ shows = sheet.get_all_records() #> <class 'list'> - list of shows from google sh
 # OUTPUTS 
 
 for row in shows: 
-    show_names = [p for p in parsed_response if p["_embedded"]["show"]["name"] == row["Name"]] # puts shows from api in a smaller list based on google spreadsheet values 
-    print(show_names)
-    print(show_names["airdate"])
-
-
+    show_names = [p for p in parsed_response if p["_embedded"]["show"]["name"] == row["Name"]] # puts shows from api in a smaller list based on google spreadsheet values  
+    #print(show_names)
+    #print(show_names[0]["_embedded"]["show"]["name"] + " " + show_names[0]["airdate"])
+    #print("-----------------------------")
+    try:
+        print(show_names[0]["_embedded"]["show"]["name"] + " " + show_names[0]["airdate"])
+    except:
+        pass
+    
+    #print("-----------------------------")
