@@ -60,7 +60,7 @@ shows = sheet.get_all_records() #> <class 'list'> - list of shows from google sh
 matching_shows = []
 for row in shows: 
     show_names = [p for p in parsed_response if p["_embedded"]["show"]["name"] == row["Name"]] # puts shows from api in a smaller list based on google spreadsheet values  
-    #print("-----------------------------")
+    
     try:
         name = show_names[0]["_embedded"]["show"]["name"]
         airdate = show_names[0]["airdate"]
@@ -73,17 +73,24 @@ for row in shows:
        print(f"{name} is not on this week")
        next
 
+print("-----------------------------")
 matching_shows = sorted(matching_shows, key=operator.itemgetter('date'))
 for match in matching_shows:
-    print("...." + match["name"] + " " + match["date"])
+    print("..." + match["name"] + " " + match["date"])
 
 
 
 
 # SEND EMAIL
+
+date = datetime.datetime.now()
+today_date = date.strftime("%Y-%m-%d")
+
+print("-----------------------------")
 print("SENDING RESULTS IN AN EMAIL ....")
 print("-----------------------------")
 template_data = {
+    "date": today_date,
     "shows": matching_shows          
 }
 
