@@ -9,6 +9,8 @@ import operator
 import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 load_dotenv()
 
@@ -17,8 +19,12 @@ request_url = "http://api.tvmaze.com/schedule/full"
 response = requests.get(request_url)
 parsed_response = json.loads(response.text)
 
+# READ IN SECRET KEYS
 DOCUMENT_ID = os.environ.get("DOCUMENT_ID", "OOPS")
 SHEET_NAME = os.environ.get("SHEET_NAME", "Shows")
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+MY_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
+SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
 
 #
 # AUTHORIZATION OF GOOGLE SHEET
@@ -62,12 +68,44 @@ for row in shows:
         matching_shows.append(shows_dict)
         #print(show_names[0]["_embedded"]["show"]["name"] + " " + show_names[0]["airdate"])
         #print(name + " " + airdate)
-
     except:
-       pass
-matching_shows = sorted(matching_shows, key=operator.itemgetter('date'))
+       name = row["Name"]
+       print(f"{name} is not on this week")
+       next
 
-    #print("-----------------------------")
+matching_shows = sorted(matching_shows, key=operator.itemgetter('date'))
+for match in matching_shows:
+    print("...." + match["name"] + " " + match["date"])
+
+
+
+
+# SEND EMAIL
+print("SENDING RESULTS IN AN EMAIL ....")
+print("-----------------------------")
+template_data = {
+    "shows": matching_shows          
+}
+
+client = SendGridAPIClient(SENDGRID_API_KEY)
+print("CLIENT:", type(client))
+
+message = Mail(from_email=MY_ADDRESS, to_emails=MY_ADDRESS)
+print("MESSAGE:", type(message))
+
+message.template_id = SENDGRID_TEMPLATE_ID
+
+message.dynamic_template_data = template_data
+
+try:
+    response = client.send(message)
+    print("RESPONSE:", type(response))
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+
+except Exception as e:
+    print("OOPS", e)
 
 
 #matching_shows = []

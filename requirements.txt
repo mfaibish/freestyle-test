@@ -2,3 +2,4 @@ python-dotenv
 gspread oauth2client
 requests
 datetime
+sendgrid==6.0.5
