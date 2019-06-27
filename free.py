@@ -4,6 +4,7 @@ import json
 from dotenv import load_dotenv
 import os
 import datetime
+import operator
 
 import requests
 import gspread
@@ -49,14 +50,27 @@ shows = sheet.get_all_records() #> <class 'list'> - list of shows from google sh
 
 # OUTPUTS 
 
+
+matching_shows = []
 for row in shows: 
     show_names = [p for p in parsed_response if p["_embedded"]["show"]["name"] == row["Name"]] # puts shows from api in a smaller list based on google spreadsheet values  
-    #print(show_names)
-    #print(show_names[0]["_embedded"]["show"]["name"] + " " + show_names[0]["airdate"])
     #print("-----------------------------")
     try:
-        print(show_names[0]["_embedded"]["show"]["name"] + " " + show_names[0]["airdate"])
+        name = show_names[0]["_embedded"]["show"]["name"]
+        airdate = show_names[0]["airdate"]
+        shows_dict = {"name": name, "date": airdate}
+        matching_shows.append(shows_dict)
+        #print(show_names[0]["_embedded"]["show"]["name"] + " " + show_names[0]["airdate"])
+        #print(name + " " + airdate)
+
     except:
-        pass
-    
+       pass
+matching_shows = sorted(matching_shows, key=operator.itemgetter('date'))
+
     #print("-----------------------------")
+
+
+#matching_shows = []
+#for i in [1, 2, 3, 4, 5]:
+#    d = {"number": i, "name": "thing"}
+#    matching_shows.append(d)
