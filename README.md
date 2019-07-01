@@ -62,6 +62,7 @@ Navigate to https://sendgrid.com/dynamic_templates and press the "Create Templat
 In the SendGrid platform, click "Add Version" to create a new version of this template and select the "Code Editor" as your desired editing mechanism.
 
 At this point you should be able to paste the following HTML into the "Code" tab, and the corresponding example data in the "Test Data" tab:
+
 "Code" tab:
 ```sh
 <img src= "https://s.pngkit.com/png/small/243-2434352_tv-network-logos-png-png-tv-network-logos.png">
@@ -100,9 +101,15 @@ python showtimes.py
 ```
 
 
-# TESTING
+## TESTING
 Run tests:
 
 ```sh
 pytest
 ```
+
+
+## ATTESTATIONS
+1. Prerequisites and Installation sections adapted from https://github.com/prof-rossetti/robo-advisor-demo-2019
+2. SendGrid sections adapted from https://github.com/prof-rossetti/nyu-info-2335-201905/blob/master/notes/python/packages/sendgrid.md
+3. Google Spreadsheet sections adapted from https://github.com/prof-rossetti/nyu-info-2335-201905/blob/master/notes/python/packages/gspread.md
