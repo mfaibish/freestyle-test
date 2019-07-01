@@ -24,6 +24,8 @@ request_url = "http://api.tvmaze.com/schedule/full"
 response = requests.get(request_url)
 parsed_response = json.loads(response.text)
 
+
+# gspread package github notes: https://github.com/prof-rossetti/nyu-info-2335-201905/blob/master/notes/python/packages/gspread.md
 # READ IN SECRET KEYS
 DOCUMENT_ID = os.environ.get("DOCUMENT_ID", "OOPS")
 SHEET_NAME = os.environ.get("SHEET_NAME", "Shows")
@@ -88,6 +90,7 @@ for match in matching_shows:
 
 
 # SEND EMAIL
+# sendgrid package notes - https://github.com/prof-rossetti/nyu-info-2335-201905/blob/master/notes/python/packages/sendgrid.md#email-templates
 
 date = datetime.datetime.now()
 today_date = date_format(date)
