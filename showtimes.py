@@ -95,7 +95,7 @@ if __name__ == '__main__':
     # SEND EMAIL
     # sendgrid package notes - https://github.com/prof-rossetti/nyu-info-2335-201905/blob/master/notes/python/packages/sendgrid.md#email-templates
 
-    date = datetime.datetime.now()
+    date = datetime.date.today() # https://github.com/prof-rossetti/nyu-info-2335-201905/blob/master/notes/python/modules/datetime.md 
     today_date = date_format(date)
 
     print("-----------------------------")
