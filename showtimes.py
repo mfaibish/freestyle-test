@@ -12,8 +12,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-load_dotenv()
-
 def date_format(x):
     today_date = x.strftime("%A, %B %d, %Y")
     return today_date
@@ -23,6 +21,8 @@ def time_format(x): # Time converstion to 12 hour (https://stackoverflow.com/que
     return t.strftime("%I:%M %p")
 
 if __name__ == '__main__':
+
+    load_dotenv()
 
     # LOAD API DATA FROM TVMAZE
     request_url = "http://api.tvmaze.com/schedule/full"
@@ -77,7 +77,7 @@ if __name__ == '__main__':
             name = show_names[0]["_embedded"]["show"]["name"]
             airdate = show_names[0]["airdate"]
             airtime = show_names[0]["airtime"]
-            shows_dict = {"name": name, "date": airdate, "time": airtime}
+            shows_dict = {"name": name, "date": airdate, "time": time_format(airtime)}
             matching_shows.append(shows_dict)
             #print(show_names[0]["_embedded"]["show"]["name"] + " " + show_names[0]["airdate"])
             #print(name + " " + airdate)
@@ -89,8 +89,7 @@ if __name__ == '__main__':
     print("-----------------------------")
     matching_shows = sorted(matching_shows, key=operator.itemgetter('date'))
     for match in matching_shows:
-        time = match["time"]
-        print("..." + match["date"] + " - " + time_format(time) + ": " + match["name"]) 
+        print("..." + match["date"] + " - " + match["time"] + ": " + match["name"]) 
 
 
     # SEND EMAIL
