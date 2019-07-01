@@ -1,4 +1,4 @@
-# free.py
+# showtimes.py
 
 import json
 from dotenv import load_dotenv
@@ -13,6 +13,11 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 load_dotenv()
+
+def date_format(x):
+    today_date = x.strftime("%A, %B %d, %Y")
+    return today_date
+
 
 # LOAD API DATA FROM TVMAZE
 request_url = "http://api.tvmaze.com/schedule/full"
@@ -64,7 +69,8 @@ for row in shows:
     try:
         name = show_names[0]["_embedded"]["show"]["name"]
         airdate = show_names[0]["airdate"]
-        shows_dict = {"name": name, "date": airdate}
+        airtime = show_names[0]["airtime"]
+        shows_dict = {"name": name, "date": airdate, "time": airtime}
         matching_shows.append(shows_dict)
         #print(show_names[0]["_embedded"]["show"]["name"] + " " + show_names[0]["airdate"])
         #print(name + " " + airdate)
@@ -76,7 +82,7 @@ for row in shows:
 print("-----------------------------")
 matching_shows = sorted(matching_shows, key=operator.itemgetter('date'))
 for match in matching_shows:
-    print("..." + match["name"] + " " + match["date"])
+    print("..." + match["date"] + " - " + match["time"] + ": " + match["name"])
 
 
 
@@ -84,7 +90,7 @@ for match in matching_shows:
 # SEND EMAIL
 
 date = datetime.datetime.now()
-today_date = date.strftime("%Y-%m-%d")
+today_date = date_format(date)
 
 print("-----------------------------")
 print("SENDING RESULTS IN AN EMAIL ....")
